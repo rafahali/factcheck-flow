@@ -238,7 +238,7 @@ function translateText(text, origin, dest) {
 }
 
 /**
- * 
+ *
  */
 function addDataInFirebase(text) {
   var baseUrl = "";
@@ -246,5 +246,17 @@ function addDataInFirebase(text) {
   var database = FirebaseApp.getDatabaseByUrl(baseUrl, secret);
 
   var data = {"text": text, "checked": false};
-  Logger.log(database.pushData("message_list", data));
+  Logger.log(database.pushData("Facts", data));
+}
+
+function getAllFacts() {
+  var baseUrl = "https://factchecking-4a655.firebaseio.com/";
+  var secret = "Bc4AtdciPbVhe5WFctzSLmfzhXmRVRKIohyP02hJ";
+  var database = FirebaseApp.getDatabaseByUrl(baseUrl, secret);
+
+  // paths of 3 different user profiles
+  var path1 = "Facts";
+  var path2 = "users/bob";
+  var path3 = "users/jeane";
+  console.info(database.getAllData([path1, path2, path3]));
 }
