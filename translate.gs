@@ -75,7 +75,7 @@ function getSelectedText() {
           var elementText = element.asText().getText();
           // This check is necessary to exclude images, which return a blank
           // text element.
-          element.editAsText().setBackgroundColor("#000000");
+          element.editAsText().setBackgroundColor("#FFE07A");
           if (elementText) {
             text.push(elementText);
           }
