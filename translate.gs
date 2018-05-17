@@ -254,9 +254,7 @@ function getAllFacts() {
   var secret = "Bc4AtdciPbVhe5WFctzSLmfzhXmRVRKIohyP02hJ";
   var database = FirebaseApp.getDatabaseByUrl(baseUrl, secret);
 
-  // paths of 3 different user profiles
+  // paths to get data
   var path1 = "Facts";
-  var path2 = "users/bob";
-  var path3 = "users/jeane";
-  console.info(database.getAllData([path1, path2, path3]));
+  console.info(database.getAllData([path1]));
 }
