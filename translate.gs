@@ -17,10 +17,18 @@
  *     determine which authorization mode (ScriptApp.AuthMode) the trigger is
  *     running in, inspect e.authMode.
  */
+
 function onOpen(e) {
   DocumentApp.getUi().createAddonMenu()
       .addItem('Start', 'showSidebar')
       .addToUi();
+}
+
+function sendAlert() {
+  var ui = DocumentApp.getUi();
+  var body = DocumentApp.getActiveDocument().getBody().editAsText();
+  ui.alert(body);
+  Logger.log("working...");
 }
 
 /**
@@ -75,7 +83,7 @@ function getSelectedText() {
           var elementText = element.asText().getText();
           // This check is necessary to exclude images, which return a blank
           // text element.
-          element.editAsText().setBackgroundColor("#FFE07A");
+          element.editAsText().setBackgroundColor("#FFE07A"); // Highlights the selected text.
           if (elementText) {
             text.push(elementText);
           }
@@ -129,10 +137,11 @@ function getTextAndTranslation(origin, dest, savePrefs) {
         .setProperty('destLang', dest);
   }
   var text = getSelectedText().join('\n');
+  var body = DocumentApp.getActiveDocument().getBody();
   addDataInFirebase(text);
   return {
     text: text,
-    translation: translateText(text, origin, dest),
+    translation: text,
   };
 }
 
@@ -238,14 +247,13 @@ function translateText(text, origin, dest) {
 }
 
 /**
- *
+ * Takes the selected text and makes it into a fact to be sent to Firebase
  */
 function addDataInFirebase(text) {
-  var baseUrl = "";
-  var secret = "";
+  var baseUrl = "https://factchecking-4a655.firebaseio.com/";
+  var secret = "Bc4AtdciPbVhe5WFctzSLmfzhXmRVRKIohyP02hJ";
   var database = FirebaseApp.getDatabaseByUrl(baseUrl, secret);
-
-  var data = {"text": text, "checked": false};
+  var data = {"text": text, "checked": false, "source": "asdf"};
   Logger.log(database.pushData("Facts", data));
 }
 
@@ -254,7 +262,9 @@ function getAllFacts() {
   var secret = "Bc4AtdciPbVhe5WFctzSLmfzhXmRVRKIohyP02hJ";
   var database = FirebaseApp.getDatabaseByUrl(baseUrl, secret);
 
-  // paths to get data
+  // paths of 3 different user profiles
   var path1 = "Facts";
-  console.info(database.getAllData([path1]));
+  var path2 = "users/bob";
+  var path3 = "users/jeane";
+  console.info(database.getAllData([path1, path2, path3]));
 }

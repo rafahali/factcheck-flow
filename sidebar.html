@@ -19,7 +19,7 @@
       overflow: hidden;
     }
     .col-one {
-      float: left;
+      float: center;
       width: 50%;
     }
     .logo {
@@ -31,65 +31,51 @@
     .width-100 {
       width: 100%;
     }
+    .fact{
+      font-size: 20px;
+      height: 30px;
+    }
+    
     </style>
   </head>
   <body>
     <div class="sidebar branding-below">
       <form>
         <div class="block col-contain">
-        <!--add drop down menu for fact check here -->
-        
+        <div class="fact">
+            <b>...FACT...</b> <!-- place holder for whatever fact is being checked -->
+            <input type="checkbox" style="background: #42f47a;" id="save-prefs">
+            <input type="checkbox" style="background: #f44259;" id="save-prefs">
+        </div>
           <div class="col-one">
-            <b>Filter by:</b>
+            <b>Source:</b>
             <select id="LangSel" onchange="setLang(),google.script.host.editor.focus()" tabindex="11">
-            <option value="Eng">English</option>
-            <option value="Fre">Français</option>
-            <option value="Spa">Español</option>
+            <option value="Eng">Phone Interview</option>
+            <option value="Fre">In Person Interview</option>
+            <option value="Fre">Other</option>
             </select>
             <div>
               <input type="radio" name="origin" id="radio-origin-auto" value="" checked="checked">
-              <label for="radio-origin-auto">Auto-detect</label>
+              <label for="radio-origin-auto">Verified</label>
             </div>
             <div>
               <input type="radio" name="origin" id="radio-origin-en" value="en">
-              <label for="radio-origin-en">English</label>
-            </div>
-            <div>
-              <input type="radio" name="origin" id="radio-origin-fr" value="fr">
-              <label for="radio-origin-fr">French</label>
-            </div>
-            <div>
-              <input type="radio" name="origin" id="radio-origin-de" value="de">
-              <label for="radio-origin-de">German</label>
-            </div>
-            <div>
-              <input type="radio" name="origin" id="radio-origin-ja" value="ja">
-              <label for="radio-origin-ja">Japanese</label>
-            </div>
-            <div>
-              <input type="radio" name="origin" id="radio-origin-es" value="es">
-              <label for="radio-origin-es">Spanish</label>
+              <label for="radio-origin-en">Unverified</label>
             </div>
           </div>
         </div>
         <div class="block form-group">
-          <label for="translated-text"><b>Translation</b></label>
+          <label for="translated-text"><b>Notes</b></label>
           <textarea class="width-100" id="translated-text" rows="10"></textarea>
         </div>
-        <div class="block">
-          <input type="checkbox" id="save-prefs">
-          <label for="save-prefs">Use these languages by default</label>
-        </div>
+        
         <div class="block" id="button-bar">
-          <button class="blue" id="run-translation">Translate</button>
-          <button id="insert-text">Insert</button>
+          <button class="blue" id="run-highlight">Let's Go!</button>
+          <button id="stop-highlight">Stop</button>
+
+          <h4> Heads up: Everything you highlight while in Fact Checker mode will become a fact. Click "Stop" anytime to exit. </h4>
         </div>
       </form>
-    </div>
-
-    <div class="sidebar bottom">
-      <img alt="Add-on logo" class="logo" src="https://www.gstatic.com/images/branding/product/1x/translate_48dp.png" width="27" height="27">
-      <span class="gray branding-text">Translate sample by Google</span>
     </div>
 
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
@@ -99,11 +85,15 @@
        * user's origin and destination language preferences if previously set.
        */
       $(function() {
-        $('#run-translation').click(runTranslation);
-        $('#insert-text').click(insertText);
+        $('#run-highlight').click(runTranslation);
+        $('#stop-highlight').click(insertText);
         google.script.run.withSuccessHandler(loadPreferences)
             .withFailureHandler(showError).getPreferences();
-      });
+      })
+      
+      function sendAlert() {
+        google.script.run.sendAlert();
+      }
 
       /**
        * Callback function that populates the origin and destination selection
